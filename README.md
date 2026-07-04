@@ -1,8 +1,8 @@
 <div align="center">
 
-# BBK Firmware Downloader
+# OOD
 
-**A sleek, modern, and smart firmware downloader for BBK Electronics devices (OPPO, OnePlus, Realme).**
+**A sleek, modern, and smart OTA firmware downloader for OnePlus devices.**
 
 [![Build and Release](https://github.com/dollbluesvanus0/bbk_downloader_app/actions/workflows/release.yml/badge.svg)](https://github.com/dollbluesvanus0/bbk_downloader_app/actions/workflows/release.yml)
 

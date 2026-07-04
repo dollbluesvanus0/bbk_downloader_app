@@ -4,7 +4,7 @@
 
 **A sleek, modern, and smart OTA firmware downloader for OnePlus devices.**
 
-[![Build and Release](https://github.com/dollbluesvanus0/bbk_downloader_app/actions/workflows/release.yml/badge.svg)](https://github.com/dollbluesvanus0/bbk_downloader_app/actions/workflows/release.yml)
+[![Build and Release](https://github.com/dollbluesvanus0/OnePlus-OTA-Downloader/actions/workflows/release.yml/badge.svg)](https://github.com/dollbluesvanus0/OnePlus-OTA-Downloader/actions/workflows/release.yml)
 
 </div>
 
@@ -32,10 +32,10 @@ To build the project locally, ensure you have Android Studio installed or the An
 
 ```bash
 # Clone the repository
-git clone https://github.com/dollbluesvanus0/bbk_downloader_app.git
+git clone https://github.com/dollbluesvanus0/OnePlus-OTA-Downloader.git
 
 # Navigate to the project directory
-cd bbk_downloader_app
+cd OnePlus-OTA-Downloader
 
 # Build the debug APK
 ./gradlew assembleDebug

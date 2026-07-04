@@ -29,5 +29,5 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = "BBK Downloader"
+rootProject.name = "OOD (Oneplus ota downloader)"
 include(":app")

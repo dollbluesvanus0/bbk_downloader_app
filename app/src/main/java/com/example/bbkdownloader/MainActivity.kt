@@ -34,6 +34,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.bbkdownloader.theme.BBKDownloaderTheme
+import java.net.HttpURLConnection
+import java.net.URL
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -456,6 +462,36 @@ fun DownloadItemCard(item: DownloadItem, onDelete: () -> Unit) {
 }
 
 fun startDownload(context: Context, originalUrl: String) {
+    if (originalUrl.contains("downloadCheck")) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val url = URL(originalUrl)
+                val connection = url.openConnection() as HttpURLConnection
+                connection.instanceFollowRedirects = false
+                connection.setRequestProperty("userid", "oplus-ota|")
+                connection.connect()
+
+                val location = connection.getHeaderField("Location")
+
+                withContext(Dispatchers.Main) {
+                    if (location != null) {
+                        enqueueDownload(context, location)
+                    } else {
+                        Toast.makeText(context, "Error: Location header not found", Toast.LENGTH_LONG).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Error resolving download URL: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    } else {
+        enqueueDownload(context, originalUrl)
+    }
+}
+
+fun enqueueDownload(context: Context, originalUrl: String) {
     try {
         // Strip the expiring token from the Gauss URL
         val cleanUrl = originalUrl.replace(Regex("/remove-[a-f0-9]+/"), "/")

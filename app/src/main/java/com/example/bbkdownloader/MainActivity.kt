@@ -471,7 +471,8 @@ fun startDownload(context: Context, originalUrl: String) {
                 connection.setRequestProperty("userid", "oplus-ota|")
                 connection.connect()
 
-                val location = connection.getHeaderField("Location")
+                val locationHeader = connection.getHeaderField("Location")
+                val location = if (locationHeader != null) URL(url, locationHeader).toString() else null
 
                 withContext(Dispatchers.Main) {
                     if (location != null) {
@@ -497,9 +498,14 @@ fun enqueueDownload(context: Context, originalUrl: String) {
         val cleanUrl = originalUrl.replace(Regex("/remove-[a-f0-9]+/"), "/")
         
         // Extract filename from URL, fallback to firmware.zip
-        var filename = cleanUrl.substringAfterLast("/", "firmware.zip")
+        var filename = cleanUrl.substringAfterLast("/")
+        if (filename.isBlank()) filename = "firmware.zip"
+
         if (filename.contains("?")) {
             filename = filename.substringBefore("?")
+        }
+        if (filename.isBlank()) {
+            filename = "firmware.zip"
         }
 
         val request = DownloadManager.Request(Uri.parse(cleanUrl))
@@ -509,6 +515,7 @@ fun enqueueDownload(context: Context, originalUrl: String) {
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
             .setAllowedOverMetered(true)
             .setAllowedOverRoaming(true)
+            .addRequestHeader("userid", "oplus-ota|")
 
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         downloadManager.enqueue(request)
